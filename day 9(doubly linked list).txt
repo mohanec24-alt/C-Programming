@@ -1,0 +1,79 @@
+#include <stdio.h>
+#include <stdlib.h>
+struct Node 
+{
+    int orderID;
+    struct Node *prev;
+    struct Node *next;
+};
+struct Node* createNode(int data)  
+{
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->orderID = data;
+    newNode->prev = NULL;
+    newNode->next = NULL;
+    return newNode;'
+    '
+}
+struct Node* insertEnd(struct Node* head, int data) 
+{
+    struct Node* newNode = createNode(data);
+    if (head == NULL)
+        return newNode;
+    struct Node* temp = head;
+    while (temp->next != NULL)
+        temp = temp->next;
+    temp->next = newNode;
+    newNode->prev = temp;
+    return head;
+}
+struct Node* insertAtPosition(struct Node* head, int data, int pos) 
+{
+    struct Node* newNode = createNode(data);
+    if (pos == 1) 
+    {
+        newNode->next = head;
+        if (head != NULL)
+            head->prev = newNode;
+        return newNode;
+    }
+
+    struct Node* temp = head;
+    for (int i = 1; i < pos - 1 && temp != NULL; i++)
+        temp = temp->next;
+
+    if (temp == NULL) 
+    {
+        printf("Invalid position\n");
+        return head;
+    }
+
+    newNode->next = temp->next;
+    newNode->prev = temp;
+    if (temp->next != NULL)
+    {
+        temp->next->prev = newNode;
+    temp->next = newNode;
+    return head;
+    }
+}
+void display(struct Node* head) 
+{
+    struct Node* temp = head;
+    while (temp != NULL) 
+    {
+        printf("%d <-> ", temp->orderID);
+        temp = temp->next;
+    }
+    printf("NULL\n");
+}
+int main() 
+{
+    struct Node* head = NULL;
+    head = insertEnd(head, 101);
+    head = insertEnd(head, 102);
+    head = insertEnd(head, 104);
+    head = insertAtPosition(head, 103, 3);
+    display(head);
+    return 0;
+}
